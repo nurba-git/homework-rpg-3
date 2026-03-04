@@ -28,6 +28,21 @@ public final class BattleEngine {
 
     public EncounterResult runEncounter(List<Combatant> teamA, List<Combatant> teamB) {
         EncounterResult result = new EncounterResult();
+
+        if (teamA == null || teamB == null) {
+            result.setWinner("None");
+            result.setRounds(0);
+            result.addLog("Invalid input: one of the teams is null.");
+            return result;
+        }
+
+        if (teamA.isEmpty() || teamB.isEmpty()) {
+            result.setWinner("None");
+            result.setRounds(0);
+            result.addLog("Invalid input: one of the teams is empty.");
+            return result;
+        }
+
         result.setWinner("TBD");
         result.setRounds(0);
         result.addLog("TODO: implement battle simulation");
