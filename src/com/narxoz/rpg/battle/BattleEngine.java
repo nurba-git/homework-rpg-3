@@ -1,5 +1,6 @@
 package com.narxoz.rpg.battle;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -43,9 +44,28 @@ public final class BattleEngine {
             return result;
         }
 
+
+        List<Combatant> a = new ArrayList<>(teamA);
+        List<Combatant> b = new ArrayList<>(teamB);
+
+        result.addLog("Battle started");
+        result.addLog("Team A: " + names(a));
+        result.addLog("Team B: " + names(b));
+
         result.setWinner("TBD");
         result.setRounds(0);
         result.addLog("TODO: implement battle simulation");
         return result;
+    }
+
+    private String names(List<Combatant> team) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (int i = 0; i < team.size(); i++) {
+            sb.append(team.get(i).getName());
+            if (i < team.size() - 1) sb.append(", ");
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }
