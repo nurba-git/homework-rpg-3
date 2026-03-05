@@ -36,14 +36,12 @@ public final class BattleEngine {
             result.addLog("Invalid input: one of the teams is null.");
             return result;
         }
-
         if (teamA.isEmpty() || teamB.isEmpty()) {
             result.setWinner("None");
             result.setRounds(0);
             result.addLog("Invalid input: one of the teams is empty.");
             return result;
         }
-
 
         List<Combatant> a = new ArrayList<>(teamA);
         List<Combatant> b = new ArrayList<>(teamB);
@@ -52,9 +50,60 @@ public final class BattleEngine {
         result.addLog("Team A: " + names(a));
         result.addLog("Team B: " + names(b));
 
-        result.setWinner("TBD");
-        result.setRounds(0);
-        result.addLog("TODO: implement battle simulation");
+        int round = 1;
+
+        while (!a.isEmpty() && !b.isEmpty()) {
+            result.addLog("---- Round " + round + " ----");
+
+
+            for (Combatant attacker : a) {
+                if (b.isEmpty()) break;
+
+                Combatant target = b.get(random.nextInt(b.size()));
+                int damage = Math.max(1, attacker.getAttackPower());
+                target.takeDamage(damage);
+
+                result.addLog("A: " + attacker.getName()
+                        + " attacks B: " + target.getName()
+                        + " for " + damage);
+
+                if (!target.isAlive()) {
+                    result.addLog("B: " + target.getName() + " died");
+                    b.remove(target);
+                }
+            }
+
+            if (b.isEmpty()) break;
+
+
+            for (Combatant attacker : b) {
+                if (a.isEmpty()) break;
+
+                Combatant target = a.get(random.nextInt(a.size()));
+                int damage = Math.max(1, attacker.getAttackPower());
+                target.takeDamage(damage);
+
+                result.addLog("B: " + attacker.getName()
+                        + " attacks A: " + target.getName()
+                        + " for " + damage);
+
+                if (!target.isAlive()) {
+                    result.addLog("A: " + target.getName() + " died");
+                    a.remove(target);
+                }
+            }
+
+            round++;
+            if (round > 500) { // safety
+                result.addLog("Stopped: too many rounds (safety break).");
+                break;
+            }
+        }
+
+        result.setRounds(round);
+        result.setWinner(a.isEmpty() ? "Team B" : "Team A");
+        result.addLog("Winner: " + result.getWinner());
+
         return result;
     }
 
